@@ -8,6 +8,12 @@ To create a NextJS project in an existing directory, run `yarn create next-app .
 ```
 # Primary dependencies
 yarn add typescript sass @types/react @types/react @types/node -D
+
+# Axios
+yarn add axios
+
+# Cookies library
+yarn add nookies
 ```
 
 ### Get the backend project
