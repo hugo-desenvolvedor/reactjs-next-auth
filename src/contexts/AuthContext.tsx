@@ -16,6 +16,7 @@ type SignInCredentials = {
 
 type AuthContextData = {
     signIn(credentials: SignInCredentials): Promise<void>;
+    signOut(): void;
     user: User;
     isAuthenticated: boolean;
 }
@@ -26,17 +27,40 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
+let authChannel: BroadcastChannel
+
 export function signOut() {
     destroyCookie(undefined, 'nextauth.token')
     destroyCookie(undefined, 'nextauth.refreshToken')
+
+    authChannel.postMessage('signOut')
 
     Router.push('/')
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User>()
-    
     const isAuthenticated = !!user;
+
+    useEffect(() => {
+        authChannel = new BroadcastChannel('auth')
+
+        authChannel.onmessage = (message) => {
+            switch (message.data) {
+                case 'signOut' :
+                    destroyCookie(undefined, 'nextauth.token')
+                    destroyCookie(undefined, 'nextauth.refreshToken')
+
+                    authChannel.close();
+                
+                    Router.push('/')
+                    break;
+                case 'signIn' :
+                    window.location.replace("http://localhost:3000/dashboard");
+                    break;
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const { 'nextauth.token': token } = parseCookies()
@@ -79,6 +103,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
             api.defaults.headers['Authorization'] = `Bearer ${token}`
 
+            //authChannel.postMessage('signIn')
+
             Router.push('/dashboard')
         } catch (error) {
             console.log(error);
@@ -86,7 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     return (
-        <AuthContext.Provider value={{ signIn, isAuthenticated, user }}>
+        <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user }}>
             {children}
         </AuthContext.Provider>
     )

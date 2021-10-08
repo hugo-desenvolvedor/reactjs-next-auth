@@ -14,6 +14,9 @@ yarn add axios
 
 # Cookies library
 yarn add nookies
+
+# JWT Decode
+yarn add jwt-decode
 ```
 
 ### Get the backend project
@@ -33,3 +36,34 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+## Structure
+```
+📦src
+ ┣ 📂components
+ ┃ ┗ 📜Can.tsx
+ ┣ 📂contexts
+ ┃ ┗ 📜AuthContext.tsx
+ ┣ 📂hooks
+ ┃ ┗ 📜useCan.ts
+ ┣ 📂pages
+ ┃ ┣ 📂api
+ ┃ ┣ 📜_app.tsx
+ ┃ ┣ 📜dashboard.tsx
+ ┃ ┣ 📜index.tsx
+ ┃ ┗ 📜metrics.tsx
+ ┣ 📂public
+ ┣ 📂services
+ ┃ ┣ 📂errors
+ ┃ ┃ ┗ 📜AuthTokenError.ts
+ ┃ ┣ 📜api.ts
+ ┃ ┗ 📜apiClient.ts
+ ┣ 📂styles
+ ┃ ┣ 📜Home.module.scss
+ ┃ ┗ 📜globals.scss
+ ┗ 📂utils
+ ┃ ┣ 📜validateUserPermissions.ts
+ ┃ ┣ 📜withSSRAuth.ts
+ ┃ ┗ 📜withSSRGuest.ts
+ ```
